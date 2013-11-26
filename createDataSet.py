@@ -2,7 +2,6 @@
 import sys, os, time
 import urllib, urllib2
 
-APIkey = '0e8c9ef9ee3ce03b2ba5dcedcab6a0b1'
 
 class ContactList:
     
