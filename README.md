@@ -6,5 +6,6 @@ doubaner_music_or_movie
 采用线性回归算法，最小二乘法求参数值。
 
 demo pic
+看上去好弱。。。（╮(╯▽╰)╭
 
 ![alt text](picdemo.png "demopic")
