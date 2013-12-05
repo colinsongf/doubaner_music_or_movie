@@ -7,4 +7,4 @@ doubaner_music_or_movie
 
 demo pic
 
-![alt text](https://github.com/onestarshang/doubaner_music_or_movie/blob/master/picdemo.png "demopic")
+![alt text](picdemo.png "demopic")
