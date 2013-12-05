@@ -67,23 +67,30 @@ class MaMClawer(Clawer):
             return False
     
     def parseMaMData(self):
+        '''
+        return res[0]:movie, res[1]:music
+        '''
+        res = [0, 0]
         if self._isGood():
-            res = [0, 0]
             pat = re.compile('[0-9]*')
             hbs = BeautifulSoup(self.htmcon)
             #parse movie DATA
-            mvtag = hbs.find('div', id = 'movie').find('h2').findAll('span')[0]
-            for mt in mvtag.findAll('a'):
-                match = pat.match(mt.string)
-                if match:
-                    res[0] += int(match.group())
+            mvtag = hbs.find('div', id = 'movie').find('h2')
+            if mvtag : 
+                mvtag = mvtag.findAll('span')[0]
+                for mt in mvtag.findAll('a'):
+                    match = pat.match(mt.string)
+                    if match:
+                        res[0] += int(match.group())
             #parse music DATA
-            mstag = hbs.find('div', id = 'music').find('h2').findAll('span')[0]
-            for mt in mstag.findAll('a'):
-                match = pat.match(mt.string)
-                if match:
-                    res[1] += int(match.group())
-            return res
+            mstag = hbs.find('div', id = 'music').find('h2')
+            if mstag :
+                mstag = mstag.findAll('span')[0]
+                for mt in mstag.findAll('a'):
+                    match = pat.match(mt.string)
+                    if match:
+                        res[1] += int(match.group())
+        return res
 
 
 if __name__=='__main__':
