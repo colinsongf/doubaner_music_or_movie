@@ -1,0 +1,81 @@
+#coding:utf-8
+from numpy import *
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import linearreg
+from mamclw import ContactList
+from mamclw import MaMClawer
+import simplejson
+import time
+
+def main(usrname):
+    cp = ContactList(usrname)
+    cp_g = cp.getContactUrl()
+    res = []
+    url = ''
+    while True:
+        try:
+            url = cp_g.next()
+            #reformat url
+            url = 'http://www.douban.com/people/%s/'%url.split('/')[-1]
+            time.sleep(1)
+            mmc = MaMClawer(url)
+            _r = mmc.parseMaMData()
+            res.append([[1, _r[0]], _r[1]])
+        except StopIteration:
+            break
+        
+    _saveres(res)
+#    res = [[[1, 5491], 76], [[1, 392], 547], [[1, 3508], 1950], 
+#           [[1, 853], 503], [[1, 11292], 1304], [[1, 347], 306], 
+#           [[1, 2694], 1975], [[1, 2849], 104], [[1, 33], 513], [[1, 813], 1735]
+#          ]
+    if res:
+        dataMat, labelMat = linearreg.formatDataSet(res)
+        #xTx.I * (xMat.T*yMat)
+        ws = linearreg.standRegres(dataMat, labelMat)
+        print type(ws)
+        #decent
+        #ws = linearreg.gradDescent(dataMat, labelMat, len(res))
+        savepic(dataMat, labelMat, ws)
+    pass
+
+def savepic(dataMat, labelMat, ws):
+    dataArr = array(dataMat)
+    wsArr = array(ws)
+    n = shape(dataArr)[0] #number of points to create
+    xcord = []
+    ycord = []
+    
+    markers =[]
+    colors =[]
+    
+    for i in range(n):
+        xcord.append(dataArr[i,1]) #movie
+        ycord.append(labelMat[i])  #music
+    
+    #drawing
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    type = ax.scatter(xcord, ycord, s=30, c='red', marker='s')
+    
+    x = arange(-1400, 12000, 100)
+    y = wsArr[0][0] + wsArr[1][0]*x
+#    print x, y
+    type2 = ax.plot(x, y)
+    plt.xlabel('movie')
+    plt.ylabel('music')
+    plt.show()
+    pass    
+
+def _saveres(resl):
+    f = open('test.json', 'w')
+    f.write(simplejson.dumps(resl))
+    f.close()
+    
+
+if __name__=='__main__':
+    usrname = ''
+    main(usrname)
+    
