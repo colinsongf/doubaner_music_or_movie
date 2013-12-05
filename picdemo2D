@@ -35,7 +35,6 @@ def main(usrname):
         dataMat, labelMat = linearreg.formatDataSet(res)
         #xTx.I * (xMat.T*yMat)
         ws = linearreg.standRegres(dataMat, labelMat)
-        print type(ws)
         #decent
         #ws = linearreg.gradDescent(dataMat, labelMat, len(res))
         savepic(dataMat, labelMat, ws)
@@ -60,7 +59,8 @@ def savepic(dataMat, labelMat, ws):
     ax = fig.add_subplot(111)
     type = ax.scatter(xcord, ycord, s=30, c='red', marker='s')
     
-    x = arange(-1400, 12000, 100)
+    _max = dataArr.max()
+    x = arange(0, _max, 50)
     y = wsArr[0][0] + wsArr[1][0]*x
 #    print x, y
     type2 = ax.plot(x, y)
